@@ -20,27 +20,28 @@ module.exports = function(Ownable) {
                 next()
             } else if (instance.profile) {
                 // if user account update where query to append group groupCondition
-                var groups = instance.profile.accessGroups
-                // check if a normal user or an internal ROLE
-                if (typeof groups === 'undefined') {
-                    groups = []
-                }
-                // console.log("Found groups:", groups);
-                var groupCondition = {
-                    ownerGroup: {
-                        inq: groups
-                    }
-                };
-                if (!ctx.query.where) {
-                    ctx.query.where = groupCondition
+                const groups = instance.profile.accessGroups || [];
+  
+                const ownerCondition = {ownerGroup: {inq: groups}};
+                let accessCondition;
+
+                if (ctx.Model.getConnector().name === 'oracle') {
+                    const likes = groups.map(group => ({accessGroups: {like: '%"' + group + '"%'}}));
+                    accessCondition = {or: likes};
                 } else {
-                    ctx.query.where = {
-                        and: [ctx.query.where, groupCondition]
-                    }
+                    accessCondition = {accessGroups: {in: groups}};
                 }
+
+                const canAccessCondition = {or: [ownerCondition, accessCondition]};
+                const currentWhere = ctx.query.where;
+
+                ctx.query.where = currentWhere
+                    ? {and: [currentWhere, canAccessCondition]}
+                    : canAccessCondition;
+
                 // const scope = ctx.query.where ? JSON.stringify(ctx.query.where) : '<all records>';
                 // console.log('%s: %s accessed %s:%s', new Date(), instance.profile.login, ctx.Model.modelName, scope);
-                next()
+                next();
             } else {
                 // According to: https://loopback.io/doc/en/lb3/Operation-hooks.html
                 var e = new Error('Access Not Allowed');
