@@ -17,6 +17,7 @@
     "loopback-component-explorer": "5.2.0",
     "loopback-component-model-diagram": "0.3.0",
     "loopback-component-mq": "^2.2.5",
+    "loopback-component-oauth2": "^3.1.0",
     "loopback-component-passport": "3.4.1",
     "loopback-component-visualizer": "1.2.1",
     "loopback-connector-kafka": "^0.2.1",

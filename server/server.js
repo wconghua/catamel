@@ -13,6 +13,21 @@ const uuidv3 = require('uuid/v3');
 var PassportConfigurator = require('loopback-component-passport').PassportConfigurator;
 var passportConfigurator = new PassportConfigurator(app);
 
+
+
+var oauth2 = require('loopback-component-oauth2');
+
+var options = {
+  dataSource: app.dataSources.db, // Data source for oAuth2 metadata persistence
+  loginPage: '/login', // The login page URL
+  loginPath: '/login' // The login form processing URL
+};
+
+oauth2.oAuth2Provider(
+  app, // The app instance
+  options // The options
+);
+
 // enhance the profile definition to allow for applying regexp based substitution rules to be applied
 // to the outcome of e.g. LDAP queries. This can for example be exploited to define the groups
 // a user belongs to by scanning the output of the memberOf fields of a user
