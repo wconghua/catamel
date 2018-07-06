@@ -3,23 +3,27 @@ import {browser, by, element} from 'protractor';
 import {DashboardPage} from '../dashboard/dashboard.po';
 import {LoginPage} from '../login/login.po';
 
+import { login, logout } from '../utils';
+
 describe('catanie Dataset Filters', function() {
   let lp: LoginPage;
   let page: DashboardPage;
   const urlParams = '/datasets?args=(creationLocation:!(),creationTime:(end:!n,start:!n),keywords:!(),limit:30,mode:view,ownerGroup:!(p11114),skip:0,sortField:!n,text:house,type:!())';
 
   beforeAll(() => {
-    lp = new LoginPage();
-    lp.navigateTo().then(() => {
-      lp.enterDetails(browser.params.login.user, browser.params.login.pwd);
-      lp.login();
-    });
+    login();
+    browser.sleep(5000);
+  });
+
+  afterAll(() => {
+    logout();
   });
 
   it('should contain correct url', () => {
       page = new DashboardPage();
-      page.navigateTo(urlParams).then(
-        () => { expect(browser.getCurrentUrl()).toContain(urlParams); });
+      page.navigateTo(urlParams).then(() => {
+        expect(browser.getCurrentUrl()).toContain(urlParams);
+      });
   });
 
   it('should have a prefilled search box', () => {

@@ -3,26 +3,23 @@ import { DashboardPage } from './dashboard.po';
 import { browser, element, by} from 'protractor';
 import { protractor } from 'protractor/built/ptor';
 import * as fs from 'fs';
+import { login, logout } from '../utils';
 
 describe('catanie Dashboard', function() {
   let lp: LoginPage;
   let page: DashboardPage;
 
   beforeAll(() => {
-    lp = new LoginPage();
-    lp.navigateTo().then(() => {
-      lp.enterDetails('ingestor', 'aman');
-      lp.login();
-      browser.sleep(2000);
-      page = new DashboardPage();
-      page.navigateTo();
-    });
+    login();
+    browser.sleep(5000);
   });
 
-  beforeEach(() => {
+  afterAll(() => {
+    logout();
   });
-
+  
   it('should be on correct page', () => {
+    browser.sleep(1000);
     expect(browser.getCurrentUrl()).toContain('datasets');
   });
 
@@ -75,6 +72,4 @@ describe('catanie Dashboard', function() {
     browser.sleep(2000);
     expect(browser.getCurrentUrl()).toContain('login');
   });
-
 });
-

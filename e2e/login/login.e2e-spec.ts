@@ -10,10 +10,11 @@ describe('catanie Login', function () {
     lp.navigateTo();
   });
 
+  afterAll(() => {
+    lp.logout();
+  });
+
   it('should not have hamburger menu visible', () => {
-    // element.all(by.css('.sidenav-toggle')).then(function (items) {
-    //   expect(items.length).toBe(0);
-    // });
     expect(element(by.css('.sidenav-toggle')).isPresent()).toBeFalsy();
   });
 
