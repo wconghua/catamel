@@ -28,7 +28,7 @@
 			"bindDn": "cn=admin,dc=example,dc=org",
 			"bindCredentials": "admin",
 			"searchBase": "OU=People,dc=example,dd=org",
-			"searchFilter": "(uid={{username}}))"
+			"searchFilter": "(uid={{username}})"
 		}
 	}
 }
