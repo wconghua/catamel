@@ -26,7 +26,6 @@
 		"server": {
 			"url": "ldap://openldap:389/",
 			"bindDn": "cn=admin,dc=example,dc=org",
-			"bindCredentials": "admin",
 			"searchBase": "OU=People,dc=example,dd=org",
 			"searchFilter": "(uid={{username}})"
 		}
