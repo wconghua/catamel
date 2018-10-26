@@ -13,7 +13,8 @@ node('docker') {
     }
   }
   stage('SuperTest Catamel ') {
-    //sh 'docker run  --privileged -t catamel_test npm run test'
+    sh 'docker-compose build'
+    sh 'docker-compose run catamel ./wait.sh'
   }
 }
 
