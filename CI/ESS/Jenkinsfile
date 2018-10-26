@@ -14,8 +14,8 @@ node('docker') {
     }
   }
   stage('SuperTest Catamel ') {
-    sh 'docker-compose -f CI/ESS/docker-compose.yaml build'
-    sh 'docker-compose -f CI/ESS/docker-compose.yaml run catamel ./wait.sh'
+    sh 'docker-compose -f docker-compose.proxy.yaml build'
+    sh 'docker-compose -f docker-compose.proxy.yaml run catamel ./wait.sh'
   }
 }
 
