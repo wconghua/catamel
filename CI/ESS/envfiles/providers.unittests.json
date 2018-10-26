@@ -24,7 +24,7 @@
 			"email": "mail"
 		},
 		"server": {
-			"url": "openldap:636/",
+			"url": "openldap:389/",
 			"bindDn": "readonly@example.org",
 			"bindCredentials": "readonly",
 			"searchBase": "OU=Example Users,DC=example,DC=org",
