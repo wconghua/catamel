@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-echo "db.Dataset.createIndex( { \"\$**\": \"text\" } )"  | mongo --host mongodb dacat
+mongo --host mongodb dacat createIndex.js
 sleep 20
 npm test
