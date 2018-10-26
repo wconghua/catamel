@@ -8,8 +8,8 @@
             "login": "User/login"
         },
         "user": {
-            "username": "admin",
-            "password": "admin",
+            "username": "zach",
+            "password": "pass",
             "login": "auth/msad"
         }
     }
