@@ -25,8 +25,8 @@ RUN npm install
 COPY . /usr/src/app
 COPY CI/ESS/envfiles/config.ess.js /usr/src/app/server/config.local.js
 COPY CI/ESS/envfiles/middleware.json /usr/src/app/server/
-COPY CI/ESS/wait.sh /usr/src/app/
-COPY CI/ESS/createIndex.js /usr/src/app/
+# COPY CI/ESS/wait.sh /usr/src/app/
+# COPY CI/ESS/createIndex.js /usr/src/app/
 
 # Start the app
 CMD ["./wait.sh"]
