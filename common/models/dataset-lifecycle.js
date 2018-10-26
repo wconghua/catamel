@@ -1,31 +1,36 @@
-'use strict';
-var config = require('../../server/config.local');
-var utils = require('./utils');
-
+"use strict";
+var config = require("../../server/config.local");
+var utils = require("./utils");
 
 module.exports = function(Datasetlifecycle) {
-    var app = require('../../server/server');
+    var app = require("../../server/server");
     // put
-    Datasetlifecycle.beforeRemote('replaceOrCreate', function(ctx, instance, next) {
-        utils.updateTimesToUTC(['dateOfLastMessage'], ctx.args.data);
+    Datasetlifecycle.beforeRemote("replaceOrCreate", function(
+        ctx,
+        instance,
+        next
+    ) {
+        utils.updateTimesToUTC(["dateOfLastMessage"], ctx.args.data);
         next();
     });
 
     //patch
-    Datasetlifecycle.beforeRemote('patchOrCreate', function(ctx, instance, next) {
-        utils.updateTimesToUTC(['dateOfLastMessage'], ctx.args.data);
+    Datasetlifecycle.beforeRemote("patchOrCreate", function(
+        ctx,
+        instance,
+        next
+    ) {
+        utils.updateTimesToUTC(["dateOfLastMessage"], ctx.args.data);
         next();
     });
-
 
     //post
-    Datasetlifecycle.beforeRemote('create', function(ctx, unused, next) {
-        utils.updateTimesToUTC(['dateOfLastMessage'], ctx.args.data);
+    Datasetlifecycle.beforeRemote("create", function(ctx, unused, next) {
+        utils.updateTimesToUTC(["dateOfLastMessage"], ctx.args.data);
         next();
     });
 
-
-    Datasetlifecycle.observe('before save', (ctx, next) => {
+    Datasetlifecycle.observe("before save", (ctx, next) => {
         // auto fill retention and publishing time only at initial creation time
         // in this case only ctx.instance is defined
         if (ctx.instance) {
@@ -35,34 +40,46 @@ module.exports = function(Datasetlifecycle) {
                 ctx.instance.dateOfLastMessage = now.toISOString();
             }
             if (!ctx.instance.archiveRetentionTime) {
-                var retention = new Date(now.setFullYear(now.getFullYear() + config.policyRetentionShiftInYears));
-                ctx.instance.archiveRetentionTime = retention.toISOString().substring(0, 10);
+                var retention = new Date(
+                    now.setFullYear(
+                        now.getFullYear() + config.policyRetentionShiftInYears
+                    )
+                );
+                ctx.instance.archiveRetentionTime = retention
+                    .toISOString()
+                    .substring(0, 10);
             }
             if (!ctx.instance.dateOfPublishing) {
                 now = new Date(); // now was modified above
-                var pubDate = new Date(now.setFullYear(now.getFullYear() + config.policyPublicationShiftInYears));
-                ctx.instance.dateOfPublishing = pubDate.toISOString().substring(0, 10);
+                var pubDate = new Date(
+                    now.setFullYear(
+                        now.getFullYear() + config.policyPublicationShiftInYears
+                    )
+                );
+                ctx.instance.dateOfPublishing = pubDate
+                    .toISOString()
+                    .substring(0, 10);
             }
         }
         // add ownerGroup field from linked Datasets
-        utils.addOwnerGroup(ctx, next)
-    })
+        utils.addOwnerGroup(ctx, next);
+    });
 
     Datasetlifecycle.isValid = function(instance, next) {
-        var ds = new Datasetlifecycle(instance)
+        var ds = new Datasetlifecycle(instance);
         ds.isValid(function(valid) {
             if (!valid) {
                 next(null, {
-                    'errors': ds.errors,
-                    'valid': false
-                })
+                    errors: ds.errors,
+                    valid: false
+                });
             } else {
                 next(null, {
-                    'valid': true
-                })
+                    valid: true
+                });
             }
         });
-    }
+    };
 
     // clean up data connected to a dataset, e.g. if archiving failed
 
@@ -73,35 +90,52 @@ module.exports = function(Datasetlifecycle) {
             if (err) {
                 next(err);
             } else {
-                l.updateAttributes({
-                    archiveStatusMessage: 'datasetCreated',
-                    retrieveStatusMessage: '',
-                    archivable: true,
-                    retrievable: false
-                }, options, function(err, dslInstance) {
-                    Datablock.destroyAll({
-                        datasetId: id,
-                    }, options, function(err, b) {
-                        if (err) {
-                            next(err);
-                        } else {
-                            Dataset.findById(id, options, function(err, instance) {
+                l.updateAttributes(
+                    {
+                        archiveStatusMessage: "datasetCreated",
+                        retrieveStatusMessage: "",
+                        archivable: true,
+                        retrievable: false
+                    },
+                    options,
+                    function(err, dslInstance) {
+                        Datablock.destroyAll(
+                            {
+                                datasetId: id
+                            },
+                            options,
+                            function(err, b) {
                                 if (err) {
-                                    console.log("==== error finding dataset:",err)
                                     next(err);
                                 } else {
-                                    instance.updateAttributes({
-                                        packedSize: 0,
-                                    }, options, function(err,inst){
-                                        next();
+                                    Dataset.findById(id, options, function(
+                                        err,
+                                        instance
+                                    ) {
+                                        if (err) {
+                                            console.log(
+                                                "==== error finding dataset:",
+                                                err
+                                            );
+                                            next(err);
+                                        } else {
+                                            instance.updateAttributes(
+                                                {
+                                                    packedSize: 0
+                                                },
+                                                options,
+                                                function(err, inst) {
+                                                    next();
+                                                }
+                                            );
+                                        }
                                     });
                                 }
-                            });
-                        }
-                    });
-                });
+                            }
+                        );
+                    }
+                );
             }
         });
     };
-
 };
