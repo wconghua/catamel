@@ -1,4 +1,6 @@
 FROM node:9
+ 
+RUN apt-get update && apt-get install -y --no-install-recommends mongodb-clients
 
 ENV PORT 3000
 EXPOSE 3000
