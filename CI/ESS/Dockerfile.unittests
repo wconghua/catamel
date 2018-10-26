@@ -10,7 +10,7 @@ RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set strict-ssl false
 
 
-RUN apt-get update && apt-get install -y --no-install-recommends mongodb-clients
+RUN apt-get update && apt-get install -y --no-install-recommends mongodb-clients vim ldap-utils
 
 ENV PORT 3000
 EXPOSE 3000
