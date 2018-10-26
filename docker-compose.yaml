@@ -31,7 +31,7 @@ services:
   openldap-seed:
       image: osixia/openldap
       volumes:
-      - ./docker/ldap/ldif_files:/ldif_files
+      - ./CI/ESS/ldif_files:/ldif_files
       links:
       - openldap
       entrypoint: sh -c '/ldif_files/addAll.sh'
