@@ -9,7 +9,7 @@ services:
   catamel:
     build: 
       context: .
-      dockerfile: CI/ESS/Dockerfile.unittest
+      dockerfile: CI/ESS/Dockerfile.unittests
     image: garethcmurphy/catamel
     ports:
       - '3000:3000'
