@@ -15,9 +15,11 @@ services:
       - '3000:3000'
     depends_on: 
       - mongodb
+      - openldap-seed
     links:
       - mongodb
       - openldap
+      - openldap-seed
   openldap:
       image: osixia/openldap
       container_name: openldap
