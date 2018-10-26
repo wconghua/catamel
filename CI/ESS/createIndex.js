@@ -1,0 +1,2 @@
+db.Dataset.createIndex( { "$**": "text" } )
+
