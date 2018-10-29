@@ -24,10 +24,10 @@
 			"email": "mail"
 		},
 		"server": {
-			"url": "ldap://openldap:389/",
+			"url": "ldap://openldap:389",
 			"bindDn": "cn=admin,dc=example,dc=org",
-			"bindCredentials": "admin",
-			"searchBase": "OU=People,dc=example,dd=org",
+            "bindCredentials": "admin",
+			"searchBase": "dc=example,dc=org",
 			"searchFilter": "(uid={{username}})"
 		}
 	}
